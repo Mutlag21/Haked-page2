@@ -1,31 +1,5 @@
 <!DOCTYPE html>
 <html lang="ar">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>خصومات نهاية السنة من نون</title>
-    <style>
-        body {
-            text-align: center;
-            font-family: Arial, sans-serif;
-            background-color: black;
-            color: white;
-            margin: 0;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-        h1 {
-            color: blue;
-            margin-bottom: 20px;
-        }
-        p {
-            color: white;
-        }
-    </style>
 </head>
 <body>
     <h1>خصومات نهاية السنة من نون</h1>
